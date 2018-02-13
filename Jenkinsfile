@@ -30,12 +30,12 @@ node {
 
 	stage 'upload to s3'
 		 // DEPLOY TO BEANSTALK
-        def destinationWarFile = "code-challenge-${env.BUILD_NUMBER}.jar"
-        def versionLabel = "code-challenge#${env.BUILD_NUMBER}"
+        def destinationWarFile = "spring-angular-${env.BUILD_NUMBER}.jar"
+        def versionLabel = "spring-angular#${env.BUILD_NUMBER}"
         def description = "${env.BUILD_URL}"
    sh '''aws s3 cp /home/ec2-user/.jenkins/workspace/spring-pipeline/target/Spring4MVCAngularJSExample.war s3://jenkins-pipeline-test/
-aws elasticbeanstalk create-application-version --source-bundle S3Bucket=jenkins-pipeline-test,S3Key=Spring4MVCAngularJSExample.war  --application-name Spring-boot --version-label v2 --description "just used for testing"
-aws elasticbeanstalk update-environment --environment-name springtiles --application-name Spring-boot --version-label v2 --description "updated"
+aws elasticbeanstalk create-application-version --source-bundle S3Bucket=jenkins-pipeline-test,S3Key=Spring4MVCAngularJSExample.war  --application-name Spring-boot --version-label $versionLabel --description "$description"
+aws elasticbeanstalk update-environment --environment-name springtiles --application-name Spring-boot --version-label $versionLabel --description "$description"
 '''
 
         sleep 10L // wait for beanstalk to update the HealthStatus
