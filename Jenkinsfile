@@ -37,19 +37,19 @@ node {
 aws elasticbeanstalk create-application-version --source-bundle S3Bucket=jenkins-pipeline-test,S3Key=Spring4MVCAngularJSExample.war  --application-name Spring-boot --version-label $versionLabel --description $description
 aws elasticbeanstalk update-environment --environment-name springtiles --application-name Spring-boot --version-label $versionLabel --description $description """
 
-        sleep 10L // wait for beanstalk to update the HealthStatus
+       sleep time: 6, unit: 'MINUTES' // wait for beanstalk to update the HealthStatus
 
-        // WAIT FOR BEANSTALK DEPLOYMENT
-//        timeout(time: 5, unit: 'MINUTES') {
-//            waitUntil {    
-//                sh "aws elasticbeanstalk describe-environments --environment-names springtiles --attribute-names All > .beanstalk-status.json"
-//                // parse `describe-environment-health` output
-//                def beanstalkStatusAsJson = readFile(".beanstalk-status.json")
-//                def beanstalkStatus = new groovy.json.JsonSlurper().parseText(beanstalkStatusAsJson)
-//                println "$beanstalkStatus"
-//                return beanstalkStatus.HealthStatus == "Ok" && beanstalkStatus.Status == "Ready"
-//            }
-//        }
+//    WAIT FOR BEANSTALK DEPLOYMENT
+        timeout(time: 5, unit: 'MINUTES') {
+            waitUntil {    
+                sh "aws elasticbeanstalk describe-environments --environment-names springtiles > .beanstalk-status.json"
+                // parse `describe-environment-health` output
+                def beanstalkStatusAsJson = readFile(".beanstalk-status.json")
+                def beanstalkStatus = new groovy.json.JsonSlurper().parseText(beanstalkStatusAsJson)
+                println "$beanstalkStatus"
+                return beanstalkStatus.Health == "Green" && beanstalkStatus.Status == "Ready"
+            }
+        }
     }
 
 
