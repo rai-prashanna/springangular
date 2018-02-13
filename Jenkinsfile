@@ -41,16 +41,16 @@ aws elasticbeanstalk update-environment --environment-name springtiles --applica
         sleep 10L // wait for beanstalk to update the HealthStatus
 
         // WAIT FOR BEANSTALK DEPLOYMENT
-        timeout(time: 5, unit: 'MINUTES') {
-            waitUntil {    
-                sh "aws elasticbeanstalk describe-environments --environment-names springtiles --attribute-names All > .beanstalk-status.json"
-                // parse `describe-environment-health` output
-                def beanstalkStatusAsJson = readFile(".beanstalk-status.json")
-                def beanstalkStatus = new groovy.json.JsonSlurper().parseText(beanstalkStatusAsJson)
-                println "$beanstalkStatus"
-                return beanstalkStatus.HealthStatus == "Ok" && beanstalkStatus.Status == "Ready"
-            }
-        }
+//        timeout(time: 5, unit: 'MINUTES') {
+//            waitUntil {    
+//                sh "aws elasticbeanstalk describe-environments --environment-names springtiles --attribute-names All > .beanstalk-status.json"
+//                // parse `describe-environment-health` output
+//                def beanstalkStatusAsJson = readFile(".beanstalk-status.json")
+//                def beanstalkStatus = new groovy.json.JsonSlurper().parseText(beanstalkStatusAsJson)
+//                println "$beanstalkStatus"
+//                return beanstalkStatus.HealthStatus == "Ok" && beanstalkStatus.Status == "Ready"
+//            }
+//        }
     }
 
 
